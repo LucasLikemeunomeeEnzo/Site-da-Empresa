@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>komonew - PubliMatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS GERAIS E RESET --- */
+        :root {
+            --primary-color: #0400da;
+            --secondary-color: #0300a3; /* Tom mais escuro para hover */
+            --dark-color: #020236;
+            --light-color: #f8f9fa;
+            --body-text-color: #495057;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--body-text-color);
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- COMPONENTES REUTILIZÁVEIS --- */
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--dark-color);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #030357;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .bg-light {
+            background-color: var(--light-color);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark-color);
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--body-text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- SEÇÃO HERO --- */
+        #hero {
+            background: linear-gradient(rgba(2, 2, 54, 0.6), rgba(2, 2, 54, 0.6)), url('https://placehold.co/1920x1080/020236/FFFFFF?text=PubliMatch') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        #hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- LAYOUT DE CONTEÚDO (PROJETO) --- */
+        .content-layout {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+
+        .image-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-content img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+        }
+
+        /* --- CARROSSEL DA EQUIPE --- */
+        .carousel-container {
+            position: relative;
+            max-width: 90%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .card {
+            min-width: calc(33.333% - 20px);
+            margin: 0 10px;
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .card-image-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden; /* Garante que a imagem fique dentro do círculo */
+        }
+
+        .card-image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz a imagem cobrir o espaço sem distorcer */
+        }
+
+
+        .card-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(4, 0, 218, 0.8);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-button:hover {
+            background-color: var(--primary-color);
+        }
+
+        .prev { left: -20px; }
+        .next { right: -20px; }
+
+        /* --- FORMULÁRIO DE CONTATO --- */
+        .contact-form {
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- RODAPÉ --- */
+        .footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho e Navegação -->
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="https://lh5.googleusercontent.com/BESoalZ4cJgVvZQOF-bbX_-Hup6vpqF9-MU8pkbOcZopHnrv66Qm9GDNcK5-nyEFY33aFGY8yBlCIi_Sf_kajzCfJWSuCIs2jshjv8jgLQcPy8_ga8ZrS1xdfMQ_w3dBa8wKHTVKXw21wt1m0wTbrlPrry7R2xH1abk0nJeTRU66-93uLlMe1g=w1280" alt="Logo Komonew">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#projeto">O Projeto</a></li>
+                    <li><a href="#equipe">Equipe</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <a href="cadastro.html" class="btn btn-primary">Inscrever-se</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção de Introdução -->
+        <section id="hero">
+            <div class="container">
+                <h1>Conectando Marcas e Influencers</h1>
+                <p>PubliMatch é a ponte para parcerias de sucesso. Junte-se a nós.</p>
+            </div>
+        </section>
+
+        <!-- Seção Sobre o Projeto -->
+        <section id="projeto" class="section-padding">
+            <div class="container content-layout">
+                <div class="text-content">
+                    <h2>Conheça o PubliMatch</h2>
+                    <p>Nosso projeto visa simplificar a conexão entre marcas e criadores de conteúdo através de uma plataforma intuitiva. O cadastro é o primeiro passo para ter acesso a um ecossistema de oportunidades. Após um rápido registro, você terá um painel de controle personalizado para encontrar parcerias, gerenciar campanhas e analisar resultados. Tudo foi pensado para oferecer a melhor experiência, com segurança e eficiência.</p>
+                </div>
+                <div class="image-content">
+                    <img src="https://lh5.googleusercontent.com/s_b5J3bfS21Dd35Vu0xXom6CcEUNSZXgRRpk0bKjXh-Hp_WFpPHHK3hpy_Kd9iw7EpUHq_OKfURJUraDOhbwV_UQP1gNhl6MmzgywKE1-8zcRquDGkKZKSoTe3FZASwEYIyQoEbRHDmwOSTVTE_IYZQrQZWEhuCBwnEb9Nu5iGw4GD-5tdsXxQ=w1280" alt="Logo do Projeto PubliMatch">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção da Equipe com Carrossel -->
+        <section id="equipe" class="section-padding bg-light">
+            <div class="container">
+                <h2>Nossa Equipe</h2>
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <!-- Card 1: Enzo Ferreira -->
+                        <div class="card">
+                            <div class="card-image-placeholder">
+                                <!-- INSTRUÇÃO: Para adicionar a foto, salve-a na mesma pasta do projeto -->
+                                <!-- e substitua 'URL_DA_FOTO' pelo nome do arquivo (ex: 'enzo.jpg') -->
+                                <!-- <img src="URL_DA_FOTO" alt="Foto de Enzo Ferreira"> -->
+                            </div>
+                            <div class="card-info">
+                                <h3>Enzo Ferreira</h3>
+                                <p>Desenvolvedor Front-end</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Felipe da Cruz -->
+                        <div class="card">
+                            <div class="card-image-placeholder">
+                                <!-- <img src="URL_DA_FOTO" alt="Foto de Felipe da Cruz"> -->
+                            </div>
+                            <div class="card-info">
+                                <h3>Felipe da Cruz</h3>
+                                <p>Desenvolvedor Back-end</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Leonardo Rodrigues -->
+                        <div class="card">
+                            <div class="card-image-placeholder">
+                                <!-- <img src="URL_DA_FOTO" alt="Foto de Leonardo Rodrigues"> -->
+                            </div>
+                            <div class="card-info">
+                                <h3>Leonardo Rodrigues</h3>
+                                <p>UI/UX Designer</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Lucas Lopes -->
+                        <div class="card">
+                            <div class="card-image-placeholder">
+                                <!-- <img src="URL_DA_FOTO" alt="Foto de Lucas Lopes"> -->
+                            </div>
+                            <div class="card-info">
+                                <h3>Lucas Lopes</h3>
+                                <p>Gerente de Projetos</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Victor Gurgel -->
+                        <div class="card">
+                             <div class="card-image-placeholder">
+                                <!-- <img src="URL_DA_FOTO" alt="Foto de Victor Gurgel"> -->
+                            </div>
+                            <div class="card-info">
+                                <h3>Victor Gurgel</h3>
+                                <p>Engenheiro de QA</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-button prev">&#10094;</button>
+                    <button class="carousel-button next">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="contato" class="section-padding">
+            <div class="container">
+                <h2>Entre em Contato</h2>
+                <form class="contact-form">
+                    <input type="text" placeholder="Seu Nome" required>
+                    <input type="email" placeholder="Seu E-mail" required>
+                    <textarea placeholder="Sua Mensagem" rows="5" required></textarea>
+                    <button type="submit" class="btn btn-secondary">Enviar Mensagem</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 komonew. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- LÓGICA PARA NAVEGAÇÃO SUAVE (SMOOTH SCROLL) ---
+            const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // --- LÓGICA DO CARROSSEL DE EQUIPE ---
+            const track = document.querySelector('.carousel-track');
+            // Verifica se o carrossel existe na página atual antes de executar o código
+            if (track) {
+                const cards = Array.from(track.children);
+                const nextButton = document.querySelector('.next');
+                const prevButton = document.querySelector('.prev');
+                
+                // Pega a largura do primeiro card (incluindo margem)
+                const cardWidth = cards[0].getBoundingClientRect().width + 20; // 20px de margem (10px de cada lado)
+                let currentIndex = 0;
+                const visibleCards = 3; // Quantos cards são visíveis por vez
+
+                const updateCarousel = () => {
+                    // Move o track para a posição correta
+                    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+                    
+                    // Habilita/desabilita os botões conforme a posição
+                    prevButton.disabled = currentIndex === 0;
+                    nextButton.disabled = currentIndex >= cards.length - visibleCards;
+                };
+
+                nextButton.addEventListener('click', () => {
+                    if (currentIndex < cards.length - visibleCards) {
+                        currentIndex++;
+                        updateCarousel();
+                    }
+                });
+
+                prevButton.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateCarousel();
+                    }
+                });
+                
+                // Inicia o carrossel na posição correta
+                updateCarousel();
+            }
+        });
+    </script>
+</body>
+</html>
