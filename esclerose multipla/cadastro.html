@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Empresa - PubliMatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0a2ff1;
+            --primary-hover-color: #001cb4;
+            --dark-color: #191934;
+            --light-color: #f7f9fc;
+            --body-text-color: #5a6474;
+            --heading-color: #191934;
+            --border-radius-sm: 6px;
+            --border-radius-md: 12px;
+            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--body-text-color);
+            background-color: #fff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: var(--border-radius-sm);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all var(--transition-speed) ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* --- LAYOUT DA PÁGINA DE CADASTRO --- */
+        .cadastro-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .image-pane {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px;
+            color: #fff;
+        }
+        
+        .image-pane h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .image-pane p {
+            font-size: 1.1rem;
+            max-width: 400px;
+            opacity: 0.9;
+        }
+        
+        .image-pane a.back-link {
+            color: #fff;
+            text-decoration: none;
+            margin-top: 30px;
+            font-weight: 500;
+            display: inline-block;
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .image-pane a.back-link:hover {
+            border-bottom-color: #fff;
+        }
+
+        .form-pane {
+            flex: 1;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .form-container h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--heading-color);
+        }
+        
+        .form-container .subtitle {
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .cadastro-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .cadastro-form.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--heading-color);
+        }
+
+        .cadastro-form input, 
+        .cadastro-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccd6e0;
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            background-color: #fff;
+        }
+        
+        .cadastro-form input:focus, 
+        .cadastro-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(10, 47, 241, 0.2);
+        }
+        
+        /* --- MENSAGEM DE CONFIRMAÇÃO --- */
+        #confirmation-message {
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: none;
+        }
+        
+        #confirmation-message.visible {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        #confirmation-message .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            background-color: #e9f7ef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #confirmation-message .icon svg {
+             color: #28a745;
+        }
+        
+        #confirmation-message h3 {
+            font-size: 1.8rem;
+            color: var(--heading-color);
+            margin-bottom: 10px;
+        }
+        
+        #confirmation-message p {
+            margin-bottom: 30px;
+        }
+        
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 992px) {
+            .cadastro-wrapper {
+                flex-direction: column;
+            }
+            .image-pane {
+                flex: 0 0 300px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding-top: 80px;
+            }
+            .image-pane h1 {
+                font-size: 2.5rem;
+            }
+            .form-pane {
+                 padding: 40px 20px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="cadastro-wrapper">
+        <div class="image-pane">
+            <h1>Junte-se à Elite do Marketing de Influência.</h1>
+            <p>Conecte sua marca aos criadores de conteúdo mais autênticos e relevantes do mercado.</p>
+            <a href="empresa.html" class="back-link">← Voltar para o Início</a>
+        </div>
+        <div class="form-pane">
+            <div class="form-container">
+                <h2>Solicitação de Cadastro</h2>
+                <p class="subtitle">Preencha os dados para iniciar sua jornada na PubliMatch.</p>
+                
+                <form class="cadastro-form" id="company-form">
+                    <div class="form-group">
+                        <label for="contact-person">Contato principal (Nome e E-mail)</label>
+                        <input type="text" id="contact-person" placeholder="Ex: João Silva, joao.silva@empresa.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="document">CNPJ (ou CPF se for MEI/freelancer)</label>
+                        <input type="text" id="document" placeholder="00.000.000/0001-00 ou 000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Área de atuação / setor</label>
+                        <input type="text" id="industry" placeholder="Ex: Tecnologia, Varejo de Moda, etc." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="website">Site oficial</label>
+                        <input type="url" id="website" placeholder="https://www.suaempresa.com.br" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="social-media">Redes sociais (links principais)</label>
+                        <textarea id="social-media" rows="3" placeholder="Cole os links do Instagram, LinkedIn, etc."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descrição curta da empresa</label>
+                        <textarea id="description" rows="4" placeholder="Fale um pouco sobre sua empresa e seus produtos/serviços." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+                </form>
+
+                <div id="confirmation-message">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3>Solicitação Enviada!</h3>
+                    <p>Recebemos suas informações. Nossa equipe entrará em contato em breve. Obrigado pelo seu interesse!</p>
+                    <a href="empresa.html" class="btn btn-primary">Voltar para o Início</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('company-form');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const formContainer = document.querySelector('.form-container');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                form.classList.add('hidden');
+                setTimeout(() => {
+                    form.style.display = 'none';
+                    confirmationMessage.classList.add('visible');
+                    formContainer.style.height = 'auto'; 
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
