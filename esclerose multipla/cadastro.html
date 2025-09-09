@@ -97,8 +97,8 @@
         </div>
         <div class="form-pane">
             <div class="form-container">
-                <h2>Crie sua conta</h2>
-                <p class="subtitle">Preencha os dados abaixo para começar.</p>
+                <h2 id="form-title">Crie sua conta</h2>
+                <p class="subtitle" id="form-subtitle">Preencha os dados abaixo para começar.</p>
                 <form class="cadastro-form" id="influencer-form">
                     <div class="form-group">
                         <label for="influencer-name">Nome Completo</label>
@@ -151,6 +151,8 @@
             const submitBtn = document.getElementById('submit-btn');
             const confirmationMessage = document.getElementById('confirmation-message');
             const statusMessage = document.getElementById('status-message');
+            const formTitle = document.getElementById('form-title');
+            const formSubtitle = document.getElementById('form-subtitle');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Previne o comportamento padrão do formulário
@@ -168,7 +170,9 @@
                 // Envia os dados do formulário usando EmailJS
                 emailjs.sendForm(serviceID, templateID, this)
                     .then(() => {
-                        // Esconde o formulário
+                        // Esconde o título, o subtítulo e o formulário
+                        formTitle.style.display = 'none';
+                        formSubtitle.style.display = 'none';
                         form.classList.add('hidden');
                         
                         // Mostra a mensagem de confirmação
@@ -194,4 +198,9 @@
         }
     </script>
 </body>
+</html>
+
+    </script>
+</body>
+
 </html>
